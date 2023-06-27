@@ -32,9 +32,37 @@ const operationResult = (string, type) =>{
 }
 
 const equalButtonEvent = () =>{
-    const inputString = inputSpace.value
+    //const acceptedOperations = ['*', '/', '+', '-']
+    const acceptedOperations = ['x']
 
-    for(let i =0;i < inputString.length;++i){
+    acceptedOperations.map(charOperation =>{
+        const inputString = inputSpace.value
+        
+        for(let index in inputString){
+            let otherIndex = index
+            let first_number = 0
+            let second_number = 0
+            if(inputString[index] == charOperation){
+                while(Number.isInteger(Number(inputString[--otherIndex])) && otherIndex!= 0){
+                }
+
+                console.log(otherIndex, index)
+                first_number = inputString.slice(otherIndex+1, index)
+                otherIndex  = index
+
+                while(Number.isInteger(Number(inputString[++otherIndex])) && otherIndex!= inputString.length){
+                }
+
+                second_number = inputString.slice(Number(index)+1, Number(otherIndex))
+                
+            }
+
+            console.log(first_number, '-', second_number)
+        }
+    })
+
+    
+    /* for(let i =0;i < inputString.length;++i){
         const char = inputString[i]
 
         if(Number.isNaN(Number(char))){
@@ -42,7 +70,7 @@ const equalButtonEvent = () =>{
 
             inputSpace.value = result
         }
-    }
+    } */
 }
 
 buttons.map((el)=>{

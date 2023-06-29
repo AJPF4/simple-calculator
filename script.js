@@ -7,16 +7,21 @@ const deleteButton = document.getElementById('delete')
 const noInputButtons = [...document.getElementsByClassName('noInputButtons')]
 
 
-const acceptedOperations = ['x', '/', '+', '$']
+const acceptedOperations = ['x', '/', '+', '-']
 
 inputSpace.value = null
 inputSpace.focus()
 
 const opResult = (countString, typeOper) =>{
     const roundNumber = (num) => Math.round(num * 1000)/1000
+    
+    let indexOperation = null
+    
+    if(countString[0] == '-')   
+        indexOperation = countString.replace('-','$').indexOf(typeOper)
+    else
+        indexOperation = countString.indexOf(typeOper)
 
-    const indexOperation = countString.indexOf(typeOper)
-    countString = countString.replace('$', '-')
     const num1 = Number(countString.slice(0, indexOperation))
     const num2 = Number(countString.slice(indexOperation+1, countString.length))
 
@@ -26,7 +31,7 @@ const opResult = (countString, typeOper) =>{
         return roundNumber(num1/num2)
     }else if(typeOper == '+'){
         return roundNumber(num1+num2)
-    }else if(typeOper == '$'){
+    }else if(typeOper == '-'){
         return roundNumber(num1-num2)
     }else{
         return 'Error'
@@ -46,10 +51,11 @@ const getIndexOfOperation = (opString,index) =>{
         start: index,
         end: index
     }
+    const difChars = ['.', '-']
     
-    do{ //'.' condition to don't stop the loop on dots that simbolise float numbers
+    do{ //'.' and '-' condition to don't stop the loop on dots that simbolise float numbers
         --Ind.start
-    }while(( isNumber(opString[Ind.start]) || opString[Ind.start] == '.') && Ind.start!= 0)
+    }while(( isNumber(opString[Ind.start]) || difChars.includes(opString[Ind.start])) && Ind.start!= 0)
 
     do{
         ++Ind.end
@@ -60,17 +66,17 @@ const getIndexOfOperation = (opString,index) =>{
 
 const equalButtonEvent = () =>{
     let inpStr = inputSpace.value       
-    inpStr = inpStr.replace('-', '$')
 
     const operationInInput = acceptedOperations.filter(charOper => inpStr.includes(charOper))
 
     operationInInput.map(charOp =>{ 
         for(let i = 0; i < inpStr.length; ++i){
-            if(inpStr[i] == charOp){
+            if(inpStr[i] == charOp && i != 0){ //i!=0 prevents error -3-4 (catch firs signal)
                 const limIndex = getIndexOfOperation(inpStr,i)
                 const singleOpStr = inpStr.slice(limIndex.start, limIndex.end)
                 const resultSingleOp = opResult(singleOpStr, charOp)
                 
+                console.log(singleOpStr)
                 inpStr = inpStr.replace(singleOpStr, resultSingleOp)
                 inputSpace.value = inpStr
 

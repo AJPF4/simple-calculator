@@ -6,73 +6,85 @@ const removeButton = document.getElementById('remove')
 const deleteButton = document.getElementById('delete')
 const noInputButtons = [...document.getElementsByClassName('noInputButtons')]
 
+
+const acceptedOperations = ['x', '/', '+', '$']
+
 inputSpace.value = null
 inputSpace.focus()
 
-const addButtonInput = (event)=>{
-    inputSpace.value = inputSpace.value + event.target.innerText
-}
+const opResult = (countString, typeOper) =>{
+    const roundNumber = (num) => Math.round(num * 1000)/1000
 
-const operationResult = (string, type) =>{
-    const index = string.indexOf(type)
-    const num1 = Number(string.slice(0, index))
-    const num2 = Number(string.slice(index+1, string.length))
+    const indexOperation = countString.indexOf(typeOper)
+    countString = countString.replace('$', '-')
+    const num1 = Number(countString.slice(0, indexOperation))
+    const num2 = Number(countString.slice(indexOperation+1, countString.length))
 
-    if(type == 'x'){
-        return num1*num2
-    }else if(type=='/'){
-        return num1/num2
-    }else if(type == '+'){
-        return num1+num2
-    }else if(type == '-'){
-        return num1-num2
+    if(typeOper == 'x'){
+        return roundNumber(num1*num2)
+    }else if(typeOper=='/'){
+        return roundNumber(num1/num2)
+    }else if(typeOper == '+'){
+        return roundNumber(num1+num2)
+    }else if(typeOper == '$'){
+        return roundNumber(num1-num2)
     }else{
         return 'Error'
     }
 }
 
-const equalButtonEvent = () =>{
-    //const acceptedOperations = ['*', '/', '+', '-']
-    const acceptedOperations = ['x']
-
-    acceptedOperations.map(charOperation =>{
-        const inputString = inputSpace.value
-        
-        for(let index in inputString){
-            let otherIndex = index
-            let first_number = 0
-            let second_number = 0
-            if(inputString[index] == charOperation){
-                while(Number.isInteger(Number(inputString[--otherIndex])) && otherIndex!= 0){
-                }
-
-                console.log(otherIndex, index)
-                first_number = inputString.slice(otherIndex+1, index)
-                otherIndex  = index
-
-                while(Number.isInteger(Number(inputString[++otherIndex])) && otherIndex!= inputString.length){
-                }
-
-                second_number = inputString.slice(Number(index)+1, Number(otherIndex))
-                
-            }
-
-            console.log(first_number, '-', second_number)
+const getIndexOfOperation = (opString,index) =>{
+    const isNumber = (char) =>{
+        if(String(char).trim() == ''){
+            return false
         }
-    })
+        else  
+            return !isNaN(char)
+    }
 
+    const Ind = {
+        start: index,
+        end: index
+    }
     
-    /* for(let i =0;i < inputString.length;++i){
-        const char = inputString[i]
+    do{ //'.' condition to don't stop the loop on dots that simbolise float numbers
+        --Ind.start
+    }while(( isNumber(opString[Ind.start]) || opString[Ind.start] == '.') && Ind.start!= 0)
 
-        if(Number.isNaN(Number(char))){
-            const result = (operationResult(inputString,char))
+    do{
+        ++Ind.end
+    }while((isNumber(opString[Ind.end]) || opString[Ind.end] == '.') && Ind.end!= opString.length)
 
-            inputSpace.value = result
-        }
-    } */
+    return Ind
 }
 
+const equalButtonEvent = () =>{
+    let inpStr = inputSpace.value       
+    inpStr = inpStr.replace('-', '$')
+
+    const operationInInput = acceptedOperations.filter(charOper => inpStr.includes(charOper))
+
+    operationInInput.map(charOp =>{ 
+        for(let i = 0; i < inpStr.length; ++i){
+            if(inpStr[i] == charOp){
+                const limIndex = getIndexOfOperation(inpStr,i)
+                const singleOpStr = inpStr.slice(limIndex.start, limIndex.end)
+                const resultSingleOp = opResult(singleOpStr, charOp)
+                
+                inpStr = inpStr.replace(singleOpStr, resultSingleOp)
+                inputSpace.value = inpStr
+
+                i = 0 // restar the loop, to verify existence of another operation represented by the charOP on the new input
+            }
+        }
+    })
+    
+    inputSpace.value = inpStr.replace('$', '-')
+}
+
+const addButtonInput = (event)=>{
+    inputSpace.value = inputSpace.value + event.target.innerText
+}
 buttons.map((el)=>{
     el.addEventListener('click', addButtonInput)
         

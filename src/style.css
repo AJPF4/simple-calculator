@@ -61,6 +61,14 @@ button{
 button:hover{
     background-color:rgba(60, 60, 60, 0.841)
 }
+
+.opButton{
+    background-color:rgb(86, 4, 4);
+}
+.opButton:hover{
+    background-color:rgb(106, 24, 24, 0.841);
+}
+
 #zero{
     width: 6em;
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/style.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Calculator</title>
 </head>
@@ -15,34 +15,34 @@
                 <button>7</button>
                 <button>8</button>
                 <button>9</button>
-                <button id="remove" class="noInputButtons">&#8592;</button>
+                <button id="remove" class="noInputButtons opButton">&#8592;</button>
             </nav>
             <nav>
                 <button>4</button>
                 <button>5</button>
                 <button>6</button>
-                <button>+</button>
+                <button class="opButton">+</button>
             </nav>
             <nav>
                 <button>1</button>
                 <button>2</button>
                 <button>3</button>
-                <button>-</button>
+                <button class="opButton">-</button>
 
             </nav>
             <nav>
                 <button id="zero">0</button>
                 <button>.</button>
-                <button>x</button>
+                <button class="opButton">x</button>
             </nav>
             <nav>
-                <button id="equal" class="noInputButtons">=</button>
-                <button id="delete" class="noInputButton">DEL</button>
+                <button id="equal" class="noInputButtons opButton">=</button>
+                <button id="delete" class="noInputButton opButton">DEL</button>
             </nav>
         </section>
         
     </main>
 
-    <script src="script.js"></script>
+    <script src="src/script.js"></script>
 </body>
 </html>
